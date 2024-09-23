@@ -23,11 +23,11 @@ public class TokenService {
     public String generateToken(Users users){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
-            String token = JWT.create()
-                    .withIssuer(users.getCpf())
+            return JWT.create()
+                    .withSubject(users.getCpf()) // Define CPF como subject
                     .withExpiresAt(generateExpirationDate())
+                    .withIssuer("auth-api") // Define issuer como auth-api
                     .sign(algorithm);
-            return token;
         } catch (JWTCreationException e){
             throw new RuntimeException("Erro ao gerar o token:", e);
         }
@@ -37,11 +37,11 @@ public class TokenService {
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("auth-api")
+                    .withIssuer("auth-api") // Verifica issuer
                     .build()
                     .verify(token)
-                    .getSubject();
-        }catch (JWTVerificationException e){
+                    .getSubject(); // Recupera CPF como subject
+        } catch (JWTVerificationException e){
             return "";
         }
     }

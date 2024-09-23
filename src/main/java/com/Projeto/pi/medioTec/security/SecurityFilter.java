@@ -31,14 +31,18 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             var login = tokenService.validateToken(token);
-            UserDetails user = usersRepository.findByCpf(login);
-
-            if (user != null) {
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("Usuário autenticado: " + user.getUsername() + ", Authorities: " + user.getAuthorities());
+            if (!login.isEmpty()) { // Certifica-se de que o CPF não está vazio
+                UserDetails user = usersRepository.findByCpf(login);
+                if (user != null) {
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println("Usuário autenticado: " + user.getUsername() + ", Authorities: " + user.getAuthorities());
+                } else {
+                    System.out.println("Usuário não encontrado para o CPF: " + login);
+                }
+            } else {
+                System.out.println("Token inválido ou CPF não recuperado.");
             }
-            System.out.println("Usuário não encontrado para o CPF: " + login);
         }
         filterChain.doFilter(request, response);
     }
@@ -46,6 +50,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private String recoverToken(HttpServletRequest request){
         var authHeader = request.getHeader("Authorization");
         if(authHeader == null){return null;}
-        return authHeader.replace("Bearer", "");
+        return authHeader.replace("Bearer ", "");
     }
 }
