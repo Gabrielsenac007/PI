@@ -16,5 +16,23 @@ public class UsersController {
     private UsersService usersService;
 
 
+    @PostMapping("/register/coordinator")
+    public ResponseEntity<String> insertCoordinator(@RequestBody UserRegisterRequestDto request) {
+        usersService.insertCoordinator(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Coordenador registrado com sucesso!");
+    }
+
+    @PostMapping("/register/professor")
+    public ResponseEntity<String> insertProfessor(@RequestBody UserRegisterRequestDto request) {
+        usersService.insertProfessor(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Professor registrado com sucesso!");
+    }
+
+    @PostMapping("/register/student")
+    public ResponseEntity<String> insertStudent(@RequestBody UserRegisterRequestDto request) {
+        usersService.insertStudent(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Aluno registrado com sucesso!");
+    }
+
 
 }
