@@ -1,9 +1,11 @@
 package com.Projeto.pi.medioTec.Entity.Disciplines;
 
+import com.Projeto.pi.medioTec.Entity.Teams.Classes;
+import com.Projeto.pi.medioTec.Entity.User.Users;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
 
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_disciplines")
@@ -12,7 +14,7 @@ public class Disciplines {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "discipline_id", updatable = false)
-    private UUID id;
+    private String id;
 
     @Column(length = 100, nullable = true)
     private String disciplineName;
@@ -20,11 +22,27 @@ public class Disciplines {
     @Column(length = 500)
     private String description;
 
-    public UUID getId() {
+    @ManyToMany(mappedBy = "disciplines")
+    private Set<Users> professors = new HashSet<>();
+
+    @ManyToMany(mappedBy = "disciplines")
+    private Set<Classes> classes = new HashSet<>();
+
+
+    public Disciplines() {
+    }
+
+    public Disciplines(String id, String disciplineName, String description) {
+        this.id = id;
+        this.disciplineName = disciplineName;
+        this.description = description;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

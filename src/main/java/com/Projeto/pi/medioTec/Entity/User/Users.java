@@ -1,13 +1,12 @@
 package com.Projeto.pi.medioTec.Entity.User;
 
+import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_user")
@@ -31,6 +30,15 @@ public class Users implements UserDetails {
     private String password;
 
     private UserRole role;
+
+    @ManyToMany
+    @JoinTable(name = "tb_professores_disciplinas",
+            joinColumns = @JoinColumn(name = "professor_id"),
+            inverseJoinColumns = @JoinColumn(name = "disciplina_id")
+    )
+    private Set<Disciplines> disciplines = new HashSet<>();
+
+
 
     public Users() {
     }
