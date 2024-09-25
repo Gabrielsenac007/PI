@@ -13,7 +13,7 @@ public class Disciplines {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "discipline_id", updatable = false)
+    @Column(name = "discipline_id", updatable = false, unique = true)
     private String id;
 
     @Column(length = 100, nullable = true)
@@ -32,8 +32,7 @@ public class Disciplines {
     public Disciplines() {
     }
 
-    public Disciplines(String id, String disciplineName, String description) {
-        this.id = id;
+    public Disciplines( String disciplineName, String description) {
         this.disciplineName = disciplineName;
         this.description = description;
     }

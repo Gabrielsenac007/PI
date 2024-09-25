@@ -1,12 +1,12 @@
 package com.Projeto.pi.medioTec.Controllers;
 
+import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertDisciplineReqDto;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Service.DisciplinesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,14 @@ public class DisciplinesController {
             return ResponseEntity.badRequest().body(listAllDisciplines);
         }
         return ResponseEntity.ok().body(listAllDisciplines);
+    }
+
+
+    @PostMapping("/insertDiscipline")
+    public ResponseEntity<?> insertDiscipline(@RequestBody InsertDisciplineReqDto request){
+        disciplinesService.insertDiscipline(request);
+        return ResponseEntity.status(HttpStatus.OK).body("Disciplina criada com sucesso!");
+
     }
 
 

@@ -39,8 +39,7 @@ public class Classes {
     public Classes() {
     }
 
-    public Classes(String id, String nameClass, String schoolYear, String shift, Integer semester) {
-        this.id = id;
+    public Classes(String nameClass, String schoolYear, String shift, Integer semester) {
         this.nameClass = nameClass;
         this.schoolYear = schoolYear;
         this.shift = shift;
