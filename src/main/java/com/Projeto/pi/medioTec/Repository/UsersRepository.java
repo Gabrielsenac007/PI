@@ -13,7 +13,7 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 
     UserDetails findByCpf(String cpf);
 
-    void deleteById(UUID id);
+    void deleteById(String id);
 
-    Optional<Users> findById(UUID id);
+    Optional<Users> findById(String id);
 }

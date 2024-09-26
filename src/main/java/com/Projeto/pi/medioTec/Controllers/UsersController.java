@@ -1,6 +1,9 @@
 package com.Projeto.pi.medioTec.Controllers;
 
 
+import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
+import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertDisciplineReqDto;
+import com.Projeto.pi.medioTec.Dto.Request.Coordinator.ProfessorRegisterCombineDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Entity.User.Users;
 import com.Projeto.pi.medioTec.Service.UsersService;
@@ -9,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,8 +30,17 @@ public class UsersController {
     }
 
     @PostMapping("/register/professor")
-    public ResponseEntity<String> insertProfessor(@RequestBody UserRegisterRequestDto request) {
-        usersService.insertProfessor(request);
+    public ResponseEntity<String> insertProfessor(@RequestBody ProfessorRegisterCombineDto request) {
+
+        UserRegisterRequestDto professor = request.professor();
+        List<AssDiscAndProfReqDto> disciplina = request.disciplina();
+
+        if (disciplina == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("A lista de disciplinas não pode ser nula");
+        }
+
+
+        usersService.insertProfessor(professor, disciplina);
         return ResponseEntity.status(HttpStatus.CREATED).body("Professor registrado com sucesso!");
     }
 
@@ -38,27 +51,27 @@ public class UsersController {
     }
 
     @DeleteMapping("/delete/professor/{id}")
-    public ResponseEntity<String> deleteProfessor(@PathVariable UUID id){
+    public ResponseEntity<String> deleteProfessor(@PathVariable String id){
         usersService.deleteProfessor(id);
         return ResponseEntity.ok().body("O Professor de ID: " + id + " Foi deletado");
     }
 
     @DeleteMapping("/delete/student/{id}")
-    public ResponseEntity<String> deleteStudent(@PathVariable UUID id){
+    public ResponseEntity<String> deleteStudent(@PathVariable String id){
         usersService.deleteStudent(id);
         return ResponseEntity.ok().body("O Student de ID: " + id + " Foi deletado");
     }
 
     @PutMapping("/update/professor/{id}")
-    public ResponseEntity<String> updateProfessor(@PathVariable UUID id, @RequestBody UserRegisterRequestDto request) {
+    public ResponseEntity<String> updateProfessor(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
         Users updatedUser = usersService.updateProfessor(id, request);
         return ResponseEntity.ok().body("Usuário de ID: " + id + " foi atualizado com sucesso.");
     }
 
     @PutMapping("/update/student/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable UUID id, @RequestBody UserRegisterRequestDto request) {
-        Users updatedUser = usersService.updateProfessor(id, request);
-        return ResponseEntity.ok().body("Usuário de ID: " + id + " foi atualizado com sucesso.");
+    public ResponseEntity<String> updateStudent(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
+        Users updatedUser = usersService.updateStudent(id, request);
+        return ResponseEntity.ok().body("Usuário de ID: " + request.name() + " foi atualizado com sucesso.");
     }
 
 

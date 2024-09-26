@@ -78,7 +78,7 @@ public class UsersService {
         usersRepository.save(newUser);
     }
 
-    private void createProfessor(UserRegisterRequestDto register, UserRole role, List<AssDiscAndProfReqDto> disciplines){
+    private void createProfessor(UserRegisterRequestDto register, List<AssDiscAndProfReqDto> disciplines, UserRole role){
 
         Users user = (Users) usersRepository.findByCpf(register.cpf());
 
@@ -88,43 +88,42 @@ public class UsersService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
         Users newUser = new Users(register.cpf(), register.name(), register.email(), encryptedPassword, role);
-        usersRepository.save(newUser);
+        Users professor = usersRepository.save(newUser);
+        String professorId = professor.getId();
 
         for(AssDiscAndProfReqDto data : disciplines){
-            disciplinesRepository.associate_professor_and_discipline(data.professorId(), data.disciplinaId());
+            disciplinesRepository.associate_professor_and_discipline(professorId, data.disciplinaId());
         }
 
+    }
+
+    public void insertProfessor(UserRegisterRequestDto register, List<AssDiscAndProfReqDto> disciplines){
+        createProfessor(register, disciplines,UserRole.PROFESSOR);
     }
 
     public void insertCoordinator(UserRegisterRequestDto register){
         createUserWithRole(register, UserRole.COORDENADOR );
     }
 
-    public void insertProfessor(UserRegisterRequestDto register, List<AssDiscAndProfReqDto> disciplines){
-        createProfessor(register, UserRole.PROFESSOR, disciplines);
-    }
 
     public void insertStudent(UserRegisterRequestDto register){
         createUserWithRole(register, UserRole.ALUNO);
     }
 
-    public void deleteProfessor(UUID id) {
+    public void deleteProfessor(String id) {
         usersRepository.deleteById(id);
     }
 
-    public void deleteStudent(UUID id) {
+    public void deleteStudent(String id) {
         usersRepository.deleteById(id);
     }
 
-    public Users updateProfessor(UUID id, UserRegisterRequestDto updatedData) {
+    public Users updateProfessor(String id, UserRegisterRequestDto updatedData) {
         Optional<Users> optionalUser = usersRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
         Users user = optionalUser.get();
-        if (user.getRole() != UserRole.PROFESSOR) {
-            throw new IllegalArgumentException("Apenas usuários com o papel de PROFESSOR podem ser atualizados por este método.");
-        }
         if (updatedData.name() != null && !updatedData.name().isEmpty()) {
             user.setName(updatedData.name());
         }
@@ -139,15 +138,13 @@ public class UsersService {
         return usersRepository.save(user);
     }
 
-    public Users updateStudent(UUID id, UserRegisterRequestDto updatedData) {
+    public Users updateStudent(String id, UserRegisterRequestDto updatedData) {
         Optional<Users> optionalUser = usersRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
         Users user = optionalUser.get();
-        if (user.getRole() != UserRole.ALUNO) {
-            throw new IllegalArgumentException("Apenas usuários com o papel de PROFESSOR podem ser atualizados por este método.");
-        }
+
         if (updatedData.name() != null && !updatedData.name().isEmpty()) {
             user.setName(updatedData.name());
         }
