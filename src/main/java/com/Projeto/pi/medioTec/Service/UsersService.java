@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UsersService {
@@ -105,5 +106,59 @@ public class UsersService {
 
     public void insertStudent(UserRegisterRequestDto register){
         createUserWithRole(register, UserRole.ALUNO);
+    }
+
+    public void deleteProfessor(UUID id) {
+        usersRepository.deleteById(id);
+    }
+
+    public void deleteStudent(UUID id) {
+        usersRepository.deleteById(id);
+    }
+
+    public Users updateProfessor(UUID id, UserRegisterRequestDto updatedData) {
+        Optional<Users> optionalUser = usersRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        Users user = optionalUser.get();
+        if (user.getRole() != UserRole.PROFESSOR) {
+            throw new IllegalArgumentException("Apenas usuários com o papel de PROFESSOR podem ser atualizados por este método.");
+        }
+        if (updatedData.name() != null && !updatedData.name().isEmpty()) {
+            user.setName(updatedData.name());
+        }
+        if (updatedData.email() != null && !updatedData.email().isEmpty()) {
+            user.setEmail(updatedData.email());
+        }
+        if (updatedData.password() != null && !updatedData.password().isEmpty()) {
+            String encryptedPassword = new BCryptPasswordEncoder().encode(updatedData.password());
+            user.setPassword(encryptedPassword);
+        }
+
+        return usersRepository.save(user);
+    }
+
+    public Users updateStudent(UUID id, UserRegisterRequestDto updatedData) {
+        Optional<Users> optionalUser = usersRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Usuário não encontrado");
+        }
+        Users user = optionalUser.get();
+        if (user.getRole() != UserRole.ALUNO) {
+            throw new IllegalArgumentException("Apenas usuários com o papel de PROFESSOR podem ser atualizados por este método.");
+        }
+        if (updatedData.name() != null && !updatedData.name().isEmpty()) {
+            user.setName(updatedData.name());
+        }
+        if (updatedData.email() != null && !updatedData.email().isEmpty()) {
+            user.setEmail(updatedData.email());
+        }
+        if (updatedData.password() != null && !updatedData.password().isEmpty()) {
+            String encryptedPassword = new BCryptPasswordEncoder().encode(updatedData.password());
+            user.setPassword(encryptedPassword);
+        }
+
+        return usersRepository.save(user);
     }
 }
