@@ -66,6 +66,11 @@ public class UsersService {
         return user;
     }
 
+
+    public List<Users> getAllStudents(){
+        return usersRepository.findByRole(UserRole.ALUNO);
+    }
+
     private void createUserWithRole(UserRegisterRequestDto register, UserRole role){
         Users user = (Users) usersRepository.findByCpf(register.cpf());
 

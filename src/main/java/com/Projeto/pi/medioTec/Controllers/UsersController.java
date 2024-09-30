@@ -23,6 +23,14 @@ public class UsersController {
     private UsersService usersService;
 
 
+
+    @GetMapping("/allStudents")
+    public ResponseEntity<List<Users>> getAllStudents(){
+        List<Users> students = usersService.getAllStudents();
+        return ResponseEntity.ok(students);
+    };
+
+
     @PostMapping("/register/coordinator")
     public ResponseEntity<String> insertCoordinator(@RequestBody UserRegisterRequestDto request) {
         usersService.insertCoordinator(request);
