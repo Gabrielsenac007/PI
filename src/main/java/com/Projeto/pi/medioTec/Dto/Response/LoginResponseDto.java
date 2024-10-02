@@ -1,4 +1,6 @@
 package com.Projeto.pi.medioTec.Dto.Response;
 
-public record LoginResponseDto(String token) {
+import com.Projeto.pi.medioTec.Entity.User.UserRole;
+
+public record LoginResponseDto(String token, String name, UserRole role) {
 }

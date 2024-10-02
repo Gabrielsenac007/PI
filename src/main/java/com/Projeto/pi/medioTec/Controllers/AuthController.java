@@ -33,10 +33,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserAuthenticationRequestDto request){
+    public ResponseEntity<?> login(@RequestBody UserAuthenticationRequestDto request) {
         try {
-            String token = usersService.login(request);
-            return ResponseEntity.ok(new LoginResponseDto(token));
+            LoginResponseDto response = usersService.login(request);
+            return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (BadCredentialsException e) {
@@ -44,7 +44,6 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        
     }
 
 }

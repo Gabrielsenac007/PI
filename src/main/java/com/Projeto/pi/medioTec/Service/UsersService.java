@@ -38,24 +38,29 @@ public class UsersService {
     @Autowired
     private DisciplinesRepository disciplinesRepository;
 
-    public String login(UserAuthenticationRequestDto data) {
+    public LoginResponseDto login(UserAuthenticationRequestDto data) {
+        if (data.cpf() == null || data.cpf().isEmpty()) {
+            throw new IllegalArgumentException("CPF não fornecido");
+        }
 
         UserDetails userDetails = usersRepository.findByCpf(data.cpf());
-
         if (userDetails == null) {
             throw new UsernameNotFoundException("CPF não encontrado");
         }
 
-        if (data.cpf() != null) {
-            var userLogin = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
-            try {
-                var auth = this.authenticationManager.authenticate(userLogin);
-                return tokenService.generateToken((Users) auth.getPrincipal());
-            } catch (Exception e) {
-                throw new BadCredentialsException("Erro ao realizar login: " + e.getMessage());
-            }
+        var userLogin = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
+        try {
+            var auth = this.authenticationManager.authenticate(userLogin);
+            Users user = (Users) auth.getPrincipal();
+            String token = tokenService.generateToken(user);
+            return new LoginResponseDto(token, user.getName(), user.getRole());
+        } catch (UsernameNotFoundException e) {
+            throw new UsernameNotFoundException("Erro ao realizar login: CPF não encontrado");
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Erro ao realizar login: Senha incorreta");
+        } catch (Exception e) {
+            throw new BadCredentialsException("Erro ao realizar login: " + e.getMessage());
         }
-        throw new IllegalArgumentException("CPF não fornecido");
     }
 
     public Users getByCpf(String cpf){
