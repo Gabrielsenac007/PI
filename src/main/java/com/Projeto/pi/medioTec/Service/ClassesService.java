@@ -6,11 +6,17 @@ import com.Projeto.pi.medioTec.Repository.ClassesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ClassesService {
 
     @Autowired
     private ClassesRepository classesRepository;
+
+    public List<Classes> getAllClasses(){
+        return classesRepository.findAll();
+    }
 
     public void insertClass(InsertClassReqDto data){
 
