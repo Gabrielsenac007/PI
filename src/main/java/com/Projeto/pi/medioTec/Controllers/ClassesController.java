@@ -1,6 +1,7 @@
 package com.Projeto.pi.medioTec.Controllers;
 
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertClassReqDto;
+import com.Projeto.pi.medioTec.Dto.Request.classes.AssociateClassesAndDisciplinesReqDto;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Service.ClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,11 @@ public class ClassesController {
         return ResponseEntity.ok(classesList);
     }
 
+    @PostMapping("/associateClassDiscipline")
+    public ResponseEntity<?> associateClassDisciplines(@RequestBody AssociateClassesAndDisciplinesReqDto request){
+        classesService.associateDisciplines(request);
+        return ResponseEntity.status(HttpStatus.OK).body("Disciplina e Turma associada com sucesso!");
+    }
 
 
 }
