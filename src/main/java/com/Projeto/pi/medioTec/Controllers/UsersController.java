@@ -30,6 +30,18 @@ public class UsersController {
         return ResponseEntity.ok(students);
     };
 
+    @GetMapping("/allProfessor")
+    public ResponseEntity<List<Users>> getAllProfessor(){
+        List<Users> professor = usersService.getAllProfessor();
+        return ResponseEntity.ok(professor);
+    };
+
+    @GetMapping("/allCoordenador")
+    public ResponseEntity<List<Users>> getAllCoordenador(){
+        List<Users> coordenador = usersService.getAllCoordenador();
+        return ResponseEntity.ok(coordenador);
+    };
+
 
     @PostMapping("/register/coordinator")
     public ResponseEntity<String> insertCoordinator(@RequestBody UserRegisterRequestDto request) {

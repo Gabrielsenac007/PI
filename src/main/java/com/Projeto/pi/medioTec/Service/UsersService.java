@@ -76,6 +76,13 @@ public class UsersService {
         return usersRepository.findByRole(UserRole.ALUNO);
     }
 
+    public List<Users> getAllProfessor(){
+        return usersRepository.findByRole(UserRole.PROFESSOR);
+    }
+
+    public List<Users> getAllCoordenador(){
+        return usersRepository.findByRole(UserRole.COORDENADOR);
+    }
     private void createUserWithRole(UserRegisterRequestDto register, UserRole role){
         Users user = (Users) usersRepository.findByCpf(register.cpf());
 
