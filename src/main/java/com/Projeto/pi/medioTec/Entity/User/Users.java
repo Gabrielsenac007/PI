@@ -1,6 +1,7 @@
 package com.Projeto.pi.medioTec.Entity.User;
 
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
+import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,6 +30,10 @@ public class Users implements UserDetails {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "class_id")  // FK da turma
+    private Classes studentClass;
+
     private UserRole role;
 
     @ManyToMany
@@ -37,6 +42,8 @@ public class Users implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "disciplina_id")
     )
     private Set<Disciplines> disciplines = new HashSet<>();
+
+
 
 
 
@@ -49,6 +56,15 @@ public class Users implements UserDetails {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
+    }
+
+    public Users(String cpf, String name, String email, String password, Classes studentClass, UserRole role) {
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.studentClass = studentClass;
         this.role = role;
     }
 
@@ -145,5 +161,21 @@ public class Users implements UserDetails {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public Classes getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(Classes studentClass) {
+        this.studentClass = studentClass;
+    }
+
+    public Set<Disciplines> getDisciplines() {
+        return disciplines;
+    }
+
+    public void setDisciplines(Set<Disciplines> disciplines) {
+        this.disciplines = disciplines;
     }
 }

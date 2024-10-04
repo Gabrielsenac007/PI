@@ -1,6 +1,7 @@
 package com.Projeto.pi.medioTec.Controllers;
 
 
+import com.Projeto.pi.medioTec.Dto.Request.AlunoRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertDisciplineReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.ProfessorRegisterCombineDto;
@@ -65,7 +66,7 @@ public class UsersController {
     }
 
     @PostMapping("/register/student")
-    public ResponseEntity<String> insertStudent(@RequestBody UserRegisterRequestDto request) {
+    public ResponseEntity<String> insertStudent(@RequestBody AlunoRegisterRequestDto request) {
         usersService.insertStudent(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Aluno registrado com sucesso!");
     }

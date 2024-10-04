@@ -1,12 +1,15 @@
 package com.Projeto.pi.medioTec.Service;
 
+import com.Projeto.pi.medioTec.Dto.Request.AlunoRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.getCpf;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
+import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.UserRole;
 import com.Projeto.pi.medioTec.Entity.User.Users;
+import com.Projeto.pi.medioTec.Repository.ClassesRepository;
 import com.Projeto.pi.medioTec.Repository.DisciplinesRepository;
 import com.Projeto.pi.medioTec.Repository.UsersRepository;
 import com.Projeto.pi.medioTec.security.TokenService;
@@ -37,6 +40,9 @@ public class UsersService {
 
     @Autowired
     private DisciplinesRepository disciplinesRepository;
+
+    @Autowired
+    private ClassesRepository classesRepository;
 
     public LoginResponseDto login(UserAuthenticationRequestDto data) {
         if (data.cpf() == null || data.cpf().isEmpty()) {
@@ -114,6 +120,27 @@ public class UsersService {
 
     }
 
+    private void createAluno(AlunoRegisterRequestDto register, UserRole role){
+
+        Optional<Classes> opClasses = classesRepository.findById(register.classeId());
+        if (opClasses.isEmpty()){
+            throw new IllegalArgumentException("Classe não encontrada");
+        }
+
+        Classes classes = opClasses.get();
+
+        Users user = (Users) usersRepository.findByCpf(register.cpf());
+
+        if (user != null) {
+            throw new IllegalArgumentException("Usuário já existe já existe");
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
+        Users newUser = new Users(register.cpf(), register.name(), register.email(), encryptedPassword, classes, role);
+        Users aluno = usersRepository.save(newUser);
+
+    }
+
     public void insertProfessor(UserRegisterRequestDto register, List<AssDiscAndProfReqDto> disciplines){
         createProfessor(register, disciplines,UserRole.PROFESSOR);
     }
@@ -123,8 +150,8 @@ public class UsersService {
     }
 
 
-    public void insertStudent(UserRegisterRequestDto register){
-        createUserWithRole(register, UserRole.ALUNO);
+    public void insertStudent(AlunoRegisterRequestDto register){
+        createAluno(register, UserRole.ALUNO);
     }
 
     public void deleteProfessor(String id) {
