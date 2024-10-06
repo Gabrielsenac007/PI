@@ -33,11 +33,9 @@ public class Statement {
     public Statement() {
     }
 
-    public Statement(String id, String title, String content, LocalDateTime creationDate, Users creator) {
-        this.id = id;
+    public Statement( String title, String content,  Users creator) {
         this.title = title;
         this.content = content;
-        this.creationDate = creationDate;
         this.creator = creator;
     }
 
