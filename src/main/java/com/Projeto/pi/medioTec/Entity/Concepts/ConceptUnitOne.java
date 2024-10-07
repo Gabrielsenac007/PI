@@ -32,6 +32,9 @@ public class ConceptUnitOne {
     @Enumerated(EnumType.STRING)
     private FinalStatus status;
 
+    public ConceptUnitOne() {
+    }
+
     public ConceptUnitOne(String id, Users aluno, Disciplines discipline, Concepts AV1, Concepts AV2, FinalStatus status) {
         this.id = id;
         this.aluno = aluno;
