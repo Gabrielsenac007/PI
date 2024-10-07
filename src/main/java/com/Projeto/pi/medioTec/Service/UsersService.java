@@ -59,7 +59,7 @@ public class UsersService {
             var auth = this.authenticationManager.authenticate(userLogin);
             Users user = (Users) auth.getPrincipal();
             String token = tokenService.generateToken(user);
-            return new LoginResponseDto(token, user.getName(), user.getRole());
+            return new LoginResponseDto(token, user.getName(), user.getRole(), user.getId());
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("Erro ao realizar login: CPF não encontrado");
         } catch (BadCredentialsException e) {
