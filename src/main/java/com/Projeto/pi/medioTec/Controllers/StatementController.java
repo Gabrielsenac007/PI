@@ -30,4 +30,10 @@ public class StatementController {
         return ResponseEntity.status(HttpStatus.OK).body("Aviso creiado com sucesso!");
     }
 
+    @GetMapping("getAllStatementsOfUser/{id}") // Adicione a variável id à URL
+    public ResponseEntity<List<Statement>> getAllStatementsOfUser(@PathVariable String id) {
+        List<Statement> listStatement = statementService.getAllStatementsOfUser(id);
+        return ResponseEntity.ok(listStatement); // Retorna a lista dentro de um ResponseEntity
+    }
+
 }

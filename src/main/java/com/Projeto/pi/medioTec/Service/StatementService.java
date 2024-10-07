@@ -39,4 +39,8 @@ public class StatementService {
 
     }
 
+    public List<Statement> getAllStatementsOfUser(String id) {
+        List<Statement> listStatement = statementRepository.findAllById(id);
+        return listStatement;
+    }
 }
