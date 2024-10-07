@@ -29,19 +29,16 @@ public class ConceptUnitThree {
     @Column(length = 10, nullable = true)
     private Concepts AV2;
 
-    @Column(length = 10, nullable = true)
-    private String NF;
 
     @Enumerated(EnumType.STRING)
     private FinalStatus status;
 
-    public ConceptUnitThree(String id, Users aluno, Disciplines discipline, Concepts AV1, Concepts AV2, String NF, FinalStatus status) {
+    public ConceptUnitThree(String id, Users aluno, Disciplines discipline, Concepts AV1, Concepts AV2, FinalStatus status) {
         this.id = id;
         this.aluno = aluno;
         this.discipline = discipline;
         this.AV1 = AV1;
         this.AV2 = AV2;
-        this.NF = NF;
         this.status = status;
     }
 
@@ -83,14 +80,6 @@ public class ConceptUnitThree {
 
     public void setAV2(Concepts AV2) {
         this.AV2 = AV2;
-    }
-
-    public String getNF() {
-        return NF;
-    }
-
-    public void setNF(String NF) {
-        this.NF = NF;
     }
 
     public FinalStatus getStatus() {
