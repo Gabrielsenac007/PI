@@ -35,5 +35,18 @@ public class DisciplinesController {
 
     }
 
+    //Nao testado
+    @PostMapping("/{userId}/addDiscipline/{disciplineId}")
+    public ResponseEntity<String> addDisciplineToProfessor(@PathVariable String userId, @PathVariable String disciplineId) {
+        disciplinesService.addDisciplineToProfessor(userId, disciplineId);
+        return ResponseEntity.ok("Disciplina adicionada com sucesso ao professor!");
+    }
+
+    //Nao testado
+    @PutMapping("/{userId}/updateDisciplines")
+    public ResponseEntity<String> updateDisciplinesOfProfessor(@PathVariable String userId, @RequestBody List<String> disciplineIds) {
+        disciplinesService.updateDisciplinesOfProfessor(userId, disciplineIds);
+        return ResponseEntity.ok("Disciplinas do professor atualizadas com sucesso!");
+    }
 
 }
