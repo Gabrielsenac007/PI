@@ -202,4 +202,25 @@ public class UsersService {
 
         return usersRepository.save(user);
     }
+
+    public Users updateCoordinator(String id, UserRegisterRequestDto updatedData) {
+        Optional<Users> optionalUser = usersRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new IllegalArgumentException("Coordinator não encontrado");
+        }
+        Users user = optionalUser.get();
+
+        if (updatedData.name() != null && !updatedData.name().isEmpty()) {
+            user.setName(updatedData.name());
+        }
+        if (updatedData.email() != null && !updatedData.email().isEmpty()) {
+            user.setEmail(updatedData.email());
+        }
+        if (updatedData.password() != null && !updatedData.password().isEmpty()) {
+            String encryptedPassword = new BCryptPasswordEncoder().encode(updatedData.password());
+            user.setPassword(encryptedPassword);
+        }
+
+        return usersRepository.save(user);
+    }
 }
