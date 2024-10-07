@@ -24,7 +24,8 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.create()
-                    .withSubject(users.getCpf()) // Define CPF como subject
+                    .withSubject(users.getCpf())
+                    .withClaim("name",users.getName())// Define CPF como subject
                     .withExpiresAt(generateExpirationDate())
                     .withIssuer("auth-api") // Define issuer como auth-api
                     .sign(algorithm);
