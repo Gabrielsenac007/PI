@@ -95,11 +95,6 @@ public class UsersController {
         return ResponseEntity.ok().body("Usuário de ID: " + request.name() + " foi atualizado com sucesso.");
     }
 
-    @PutMapping("/update/coordinator/{id}")
-    public ResponseEntity<String> updateCoordinator(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
-        Users updatedUser = usersService.updateCoordinator(id, request);
-        return ResponseEntity.ok().body("Coordinator de ID: " + id + " foi atualizado com sucesso.");
-    }
 
 
 }

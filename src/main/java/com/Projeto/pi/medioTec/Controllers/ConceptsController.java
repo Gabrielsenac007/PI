@@ -17,7 +17,7 @@ public class ConceptsController {
 
 
 
-    @PutMapping("/insertConceptUnitOne")
+    @PostMapping("/insertConceptUnitOne")
     public ResponseEntity<?> insertConceptUnitOne(@RequestBody InsertConceptsAlunoGenericReqDto request){
         conceptsService.insertConceptsAlunoUnitOne(request);
         return ResponseEntity.status(HttpStatus.OK).body("Conceito inserido com sucesso!");
@@ -25,7 +25,7 @@ public class ConceptsController {
 
 
 
-    @PutMapping("/insertConceptUnitTwo")
+    @PostMapping("/insertConceptUnitTwo")
     public ResponseEntity<?> insertConceptUnitTwo(@RequestBody InsertConceptsAlunoGenericReqDto request) {
         conceptsService.insertConceptsAlunoUnitTwo(request);
         return ResponseEntity.status(HttpStatus.OK).body("Conceito unidade dois inserido com sucesso!");
@@ -33,7 +33,7 @@ public class ConceptsController {
 
 
 
-    @PutMapping("/insertConceptUnitThree")
+    @PostMapping("/insertConceptUnitThree")
     public ResponseEntity<?> insertConceptUnitThree(@RequestBody InsertConceptsAlunoGenericReqDto request) {
         conceptsService.insertConceptsAlunoUnitThree(request);
         return ResponseEntity.status(HttpStatus.OK).body("Conceito unidade tres inserido com sucesso!");
