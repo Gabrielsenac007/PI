@@ -6,6 +6,7 @@ import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.getCpf;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
+import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.UserRole;
 import com.Projeto.pi.medioTec.Entity.User.Users;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -226,6 +228,21 @@ public class UsersService {
 
     public List<Users> getAllStudentsByClassId(String classId) {
         return usersRepository.findByStudentClass_Id(classId);
+    }
+
+    public List<Users> getProfessorsByClassId(String classId) {
+        Optional<Classes> optionalClass = classesRepository.findById(classId);
+        if (optionalClass.isEmpty()) {
+            throw new IllegalArgumentException("Classe não encontrada");
+        }
+        Classes classe = optionalClass.get();
+        Set<Disciplines> disciplines = classe.getDisciplines();
+
+        if (disciplines.isEmpty()) {
+            throw new IllegalArgumentException("Nenhuma disciplina associada à turma");
+        }
+
+        return usersRepository.findDistinctByDisciplinesInAndRole(disciplines, UserRole.PROFESSOR);
     }
 
 }

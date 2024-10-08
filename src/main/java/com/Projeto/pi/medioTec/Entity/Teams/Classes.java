@@ -52,6 +52,23 @@ public class Classes {
         this.semester = semester;
     }
 
+
+    public Set<Disciplines> getDisciplines() {
+        return disciplines;
+    }
+
+    public void setDisciplines(Set<Disciplines> disciplines) {
+        this.disciplines = disciplines;
+    }
+
+    public Set<Users> getStudents() {
+        return students;
+    }
+
+    public void setStudents(Set<Users> students) {
+        this.students = students;
+    }
+
     public String getId() {
         return id;
     }

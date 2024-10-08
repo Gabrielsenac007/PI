@@ -110,5 +110,14 @@ public class UsersController {
         return ResponseEntity.ok(students);
     }
 
+    @GetMapping("/professors/class/{classId}")
+    public ResponseEntity<List<Users>> getProfessorsByClassId(@PathVariable String classId) {
+        List<Users> professors = usersService.getProfessorsByClassId(classId);
+        if (professors.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(professors);
+    }
+
 
 }
