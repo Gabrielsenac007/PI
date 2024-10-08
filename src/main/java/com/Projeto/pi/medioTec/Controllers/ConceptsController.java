@@ -62,4 +62,13 @@ public class ConceptsController {
         return ResponseEntity.ok(listConceptsUnitThree);
     }
 
+    @GetMapping("/class/{classId}/discipline/{disciplineId}")
+    public ResponseEntity<List<ConceptUnitOne>> getConceptsByClassAndDiscipline(
+            @PathVariable String classId,
+            @PathVariable String disciplineId) {
+
+        List<ConceptUnitOne> concepts = conceptsService.getConceptsByClassAndDiscipline(classId, disciplineId);
+        return ResponseEntity.ok(concepts);
+    }
+
 }

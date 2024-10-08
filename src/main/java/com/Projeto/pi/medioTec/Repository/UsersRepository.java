@@ -17,6 +17,8 @@ public interface UsersRepository extends JpaRepository<Users, String> {
 
     void deleteById(String id);
 
+    List<Users> findByStudentClass_Id(String classId);
+
     List<Users> findByRole(UserRole role);
 
     Optional<Users> findById(String id);

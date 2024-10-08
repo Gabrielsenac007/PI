@@ -223,4 +223,9 @@ public class UsersService {
 
         return usersRepository.save(user);
     }
+
+    public List<Users> getAllStudentsByClassId(String classId) {
+        return usersRepository.findByStudentClass_Id(classId);
+    }
+
 }

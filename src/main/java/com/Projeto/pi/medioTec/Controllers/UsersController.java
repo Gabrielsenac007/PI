@@ -101,5 +101,14 @@ public class UsersController {
         return ResponseEntity.ok().body("Coordinator de ID: " + id + " foi atualizado com sucesso.");
     }
 
+    @GetMapping("/students/class/{classId}")
+    public ResponseEntity<List<Users>> getAllStudentsByClassId(@PathVariable String classId) {
+        List<Users> students = usersService.getAllStudentsByClassId(classId);
+        if (students.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(students);
+    }
+
 
 }

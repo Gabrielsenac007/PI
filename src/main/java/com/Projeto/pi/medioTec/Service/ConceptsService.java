@@ -76,4 +76,13 @@ public class ConceptsService {
         List<ConceptUnitThree> listConcepts = conceptUnitThreeRepository.findAll();
         return listConcepts;
     }
+
+
+    public List<ConceptUnitOne> getConceptsByClassAndDiscipline(String classId, String disciplineId) {
+        return conceptUnitOneRepository.findConceptsByClassAndDiscipline(classId, disciplineId);
+    }
+
+
+
+
 }
