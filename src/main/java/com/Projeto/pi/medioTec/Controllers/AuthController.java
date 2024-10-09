@@ -22,6 +22,8 @@ public class AuthController {
     private UsersService usersService;
 
 
+
+
     @GetMapping("/user/{cpf}")
     public ResponseEntity<Users> getUserByCpf(@PathVariable String cpf) {
         try {
