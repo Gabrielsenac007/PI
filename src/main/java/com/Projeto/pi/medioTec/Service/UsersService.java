@@ -149,12 +149,15 @@ public class UsersService {
         createUserWithRole(register, UserRole.COORDENADOR );
     }
 
+    public void deleteCoordinator(String id){
+        usersRepository.deleteById(id);
+    }
 
     public void insertStudent(AlunoRegisterRequestDto register){
         createAluno(register, UserRole.ALUNO);
     }
 
-    public void deleteProfessor(String id) {
+    public void  deleteProfessor(String id) {
         usersRepository.deleteById(id);
     }
 

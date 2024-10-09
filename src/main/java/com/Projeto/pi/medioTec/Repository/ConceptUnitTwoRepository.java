@@ -1,9 +1,13 @@
 package com.Projeto.pi.medioTec.Repository;
 
+import com.Projeto.pi.medioTec.Entity.Concepts.ConceptUnitOne;
 import com.Projeto.pi.medioTec.Entity.Concepts.ConceptUnitTwo;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface ConceptUnitTwoRepository extends JpaRepository<ConceptUnitTwo, String> {
 
@@ -18,5 +22,10 @@ public interface ConceptUnitTwoRepository extends JpaRepository<ConceptUnitTwo, 
                                        @Param ("p_aluno_id") String alunoId,
                                        @Param ("p_discipline_id") String disciplineId
     );
+
+
+    @Query("SELECT c FROM ConceptUnitTwo c WHERE c.aluno.studentClass.id = :classId AND c.discipline.id = :disciplineId")
+    List<ConceptUnitTwo> findConceptsByClassAndDiscipline(@Param("classId") String classId, @Param("disciplineId") String disciplineId);
+
 
 }

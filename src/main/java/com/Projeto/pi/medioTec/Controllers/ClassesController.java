@@ -2,6 +2,7 @@ package com.Projeto.pi.medioTec.Controllers;
 
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertClassReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.classes.AssociateClassesAndDisciplinesReqDto;
+import com.Projeto.pi.medioTec.Dto.Request.classes.UpdateClassReqDto;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Service.ClassesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,17 @@ public class ClassesController {
         return ResponseEntity.status(HttpStatus.OK).body("Disciplina e Turma associada com sucesso!");
     }
 
+    @DeleteMapping("/delete/class/{id}")
+    public ResponseEntity<?> deleteClass(@PathVariable String id){
+        classesService.deleteClass(id);
+        return ResponseEntity.ok("Turma deletada com sucesso");
+    }
+
+    @PutMapping("/update/class")
+    public  ResponseEntity updateClass(@RequestBody UpdateClassReqDto request){
+        classesService.updateClass(request);
+        return ResponseEntity.status(HttpStatus.OK).body("Turma editada com sucesso!");
+    }
 
 
 }

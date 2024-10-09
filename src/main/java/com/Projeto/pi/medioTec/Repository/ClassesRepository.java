@@ -13,4 +13,13 @@ public interface ClassesRepository extends JpaRepository<Classes, String> {
                                            @Param("p_discipline_id") String disciplineId
     );
 
+    void deleteById(String id);
+
+    @Procedure
+    void update_class(@Param("p_class_id") String id,
+                      @Param("p_name_class") String name,
+                      @Param("p_school_year") String schoolYear,
+                      @Param("p_semester") Integer semester,
+                      @Param("p_shift") String shift);
+
 }

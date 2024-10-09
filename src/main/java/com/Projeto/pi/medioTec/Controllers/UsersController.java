@@ -83,6 +83,12 @@ public class UsersController {
         return ResponseEntity.ok().body("O Student de ID: " + id + " Foi deletado");
     }
 
+    @DeleteMapping("/delete/coordinator/{id}")
+    public ResponseEntity<?> deleteCoordinato(@PathVariable String id){
+        usersService.deleteCoordinator(id);
+        return  ResponseEntity.status(HttpStatus.OK).body("Coordenador deletado com sucesso");
+    }
+
     @PutMapping("/update/professor/{id}")
     public ResponseEntity<String> updateProfessor(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
         Users updatedUser = usersService.updateProfessor(id, request);

@@ -62,12 +62,30 @@ public class ConceptsController {
         return ResponseEntity.ok(listConceptsUnitThree);
     }
 
-    @GetMapping("/class/{classId}/discipline/{disciplineId}")
-    public ResponseEntity<List<ConceptUnitOne>> getConceptsByClassAndDiscipline(
+    @GetMapping("/conceptsOne/class/{classId}/discipline/{disciplineId}")
+    public ResponseEntity<List<ConceptUnitOne>> getConceptsOneByClassAndDiscipline(
             @PathVariable String classId,
             @PathVariable String disciplineId) {
 
-        List<ConceptUnitOne> concepts = conceptsService.getConceptsByClassAndDiscipline(classId, disciplineId);
+        List<ConceptUnitOne> concepts = conceptsService.getConceptsOneByClassAndDiscipline(classId, disciplineId);
+        return ResponseEntity.ok(concepts);
+    }
+
+    @GetMapping("/conceptsTwo/class/{classId}/discipline/{disciplineId}")
+    public ResponseEntity<List<ConceptUnitTwo>> getConceptsTwoByClassAndDiscipline(
+            @PathVariable String classId,
+            @PathVariable String disciplineId) {
+
+        List<ConceptUnitTwo> concepts = conceptsService.getConceptsTwoByClassAndDiscipline(classId, disciplineId);
+        return ResponseEntity.ok(concepts);
+    }
+
+    @GetMapping("/conceptsThree/class/{classId}/discipline/{disciplineId}")
+    public ResponseEntity<List<ConceptUnitThree>> getConceptsThreeByClassAndDiscipline(
+            @PathVariable String classId,
+            @PathVariable String disciplineId) {
+
+        List<ConceptUnitThree> concepts = conceptsService.getConceptsThreeByClassAndDiscipline(classId, disciplineId);
         return ResponseEntity.ok(concepts);
     }
 

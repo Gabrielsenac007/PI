@@ -78,8 +78,17 @@ public class ConceptsService {
     }
 
 
-    public List<ConceptUnitOne> getConceptsByClassAndDiscipline(String classId, String disciplineId) {
+    public List<ConceptUnitOne> getConceptsOneByClassAndDiscipline(String classId, String disciplineId) {
         return conceptUnitOneRepository.findConceptsByClassAndDiscipline(classId, disciplineId);
+    }
+
+
+    public List<ConceptUnitTwo> getConceptsTwoByClassAndDiscipline(String classId, String disciplineId) {
+        return conceptUnitTwoRepository.findConceptsByClassAndDiscipline(classId, disciplineId);
+    }
+
+    public List<ConceptUnitThree> getConceptsThreeByClassAndDiscipline(String classId, String disciplineId) {
+        return conceptUnitThreeRepository.findConceptsByClassAndDiscipline(classId, disciplineId);
     }
 
 
