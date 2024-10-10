@@ -2,6 +2,7 @@ package com.Projeto.pi.medioTec.Entity.User;
 
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +32,7 @@ public class Users implements UserDetails {
     private String password;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "class_id")  // FK da turma
     private Classes studentClass;
 
