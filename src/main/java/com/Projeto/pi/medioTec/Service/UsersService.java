@@ -6,6 +6,7 @@ import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.getCpf;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
+import com.Projeto.pi.medioTec.Dto.Response.ResponceAlunoList;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.UserRole;
