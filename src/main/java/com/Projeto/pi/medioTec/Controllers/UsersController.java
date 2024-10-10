@@ -5,7 +5,7 @@ import com.Projeto.pi.medioTec.Dto.Request.AlunoRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.ProfessorRegisterCombineDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
-import com.Projeto.pi.medioTec.Dto.Response.ResponceAlunoList;
+import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
 import com.Projeto.pi.medioTec.Entity.User.Users;
 import com.Projeto.pi.medioTec.Service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +25,10 @@ public class UsersController {
 
 
     @GetMapping("/allStudents")
-    public ResponseEntity<ResponceAlunoList> getAllStudents(){
-        List<Users> students = usersService.getAllStudents();
-        return ResponseEntity.ok( new ResponceAlunoList(students));
-    };
+    public ResponseEntity<List<AlunoDTO>> getAllStudents() {
+        List<AlunoDTO> students = usersService.getAllStudents();
+        return ResponseEntity.ok(students);
+    }
 
     @GetMapping("/allProfessor")
     public ResponseEntity<List<Users>> getAllProfessor(){

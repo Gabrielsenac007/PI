@@ -4,9 +4,8 @@ import com.Projeto.pi.medioTec.Dto.Request.AlunoRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
-import com.Projeto.pi.medioTec.Dto.Request.getCpf;
+import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
-import com.Projeto.pi.medioTec.Dto.Response.ResponceAlunoList;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.UserRole;
@@ -27,7 +26,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
@@ -81,8 +80,11 @@ public class UsersService {
     }
 
 
-    public List<Users> getAllStudents(){
-        return usersRepository.findByRole(UserRole.ALUNO);
+    public List<AlunoDTO> getAllStudents() {
+        List<Users> students = usersRepository.findByRole(UserRole.ALUNO);
+        return students.stream()
+                .map(user -> new AlunoDTO(user.getCpf(), user.getName(), user.getEmail(), user.getStudentClass()))
+                .collect(Collectors.toList());
     }
 
     public List<Users> getAllProfessor(){
