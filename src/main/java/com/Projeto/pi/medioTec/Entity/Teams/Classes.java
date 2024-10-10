@@ -2,6 +2,7 @@ package com.Projeto.pi.medioTec.Entity.Teams;
 
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.User.Users;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -36,6 +37,7 @@ public class Classes {
     private Set<Disciplines> disciplines = new HashSet<>();
 
     @OneToMany(mappedBy = "studentClass")
+    @JsonIgnore
     private Set<Users> students = new HashSet<>();
 
     public Classes() {
