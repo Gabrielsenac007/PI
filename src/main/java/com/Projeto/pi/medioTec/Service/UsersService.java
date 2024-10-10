@@ -251,4 +251,7 @@ public class UsersService {
         return usersRepository.findDistinctByDisciplinesInAndRole(disciplines, UserRole.PROFESSOR);
     }
 
+    public List<Users> getByName(String nameUser) {
+        return usersRepository.findByName(nameUser);
+    }
 }

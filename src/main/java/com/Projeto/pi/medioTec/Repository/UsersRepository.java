@@ -26,4 +26,6 @@ public interface UsersRepository extends JpaRepository<Users, String> {
     Optional<Users> findById(String id);
 
     List<Users> findDistinctByDisciplinesInAndRole(Set<Disciplines> disciplines, UserRole role);
+
+    List<Users> findByName(String name);
 }

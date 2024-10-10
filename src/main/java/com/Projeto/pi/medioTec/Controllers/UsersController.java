@@ -124,5 +124,20 @@ public class UsersController {
         return ResponseEntity.ok(professors);
     }
 
+    @GetMapping("alunos/findByNome/{nameUser}")
+    public ResponseEntity<List<Users>> getByNameAluno(@PathVariable String nameUser) {
+        return ResponseEntity.ok(usersService.getByName(nameUser));
+    }
+
+    @GetMapping("professor/findByNome/{nameUser}")
+    public ResponseEntity<List<Users>> getByNameProfessor(@PathVariable String nameUser) {
+        return ResponseEntity.ok(usersService.getByName(nameUser));
+    }
+
+    @GetMapping("coordenador/findByNome/{nameUser}")
+    public ResponseEntity<List<Users>> getByNameCoordenador(@PathVariable String nameUser) {
+        return ResponseEntity.ok(usersService.getByName(nameUser));
+    }
+
 
 }
