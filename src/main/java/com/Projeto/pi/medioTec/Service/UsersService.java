@@ -83,7 +83,7 @@ public class UsersService {
     public List<AlunoDTO> getAllStudents() {
         List<Users> students = usersRepository.findByRole(UserRole.ALUNO);
         return students.stream()
-                .map(user -> new AlunoDTO(user.getCpf(), user.getName(), user.getEmail(), user.getStudentClass()))
+                .map(user -> new AlunoDTO(user.getId(),user.getCpf(), user.getName(), user.getEmail(), user.getStudentClass()))
                 .collect(Collectors.toList());
     }
 
