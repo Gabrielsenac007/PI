@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_class")
-public class Classes {
+public class  Classes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -110,4 +110,6 @@ public class Classes {
     public void setSemester(Integer semester) {
         this.semester = semester;
     }
+
+
 }

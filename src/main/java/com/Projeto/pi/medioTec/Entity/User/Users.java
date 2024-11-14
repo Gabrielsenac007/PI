@@ -180,4 +180,5 @@ public class Users implements UserDetails {
     public void setDisciplines(Set<Disciplines> disciplines) {
         this.disciplines = disciplines;
     }
+
 }

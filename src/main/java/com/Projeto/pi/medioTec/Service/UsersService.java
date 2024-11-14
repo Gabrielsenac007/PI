@@ -4,6 +4,7 @@ import com.Projeto.pi.medioTec.Dto.Request.AlunoRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
+import com.Projeto.pi.medioTec.Dto.Request.classes.ClassDto;
 import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
@@ -47,21 +48,52 @@ public class UsersService {
     private ClassesRepository classesRepository;
 
     public LoginResponseDto login(UserAuthenticationRequestDto data) {
+
         if (data.cpf() == null || data.cpf().isEmpty()) {
             throw new IllegalArgumentException("CPF não fornecido");
         }
 
-        UserDetails userDetails = usersRepository.findByCpf(data.cpf());
-        if (userDetails == null) {
+        Users user = usersRepository.findByCpf(data.cpf());
+        if (user == null) {
             throw new UsernameNotFoundException("CPF não encontrado");
         }
 
         var userLogin = new UsernamePasswordAuthenticationToken(data.cpf(), data.password());
         try {
             var auth = this.authenticationManager.authenticate(userLogin);
-            Users user = (Users) auth.getPrincipal();
+            user = (Users) auth.getPrincipal(); // Re-obter usuário autenticado
             String token = tokenService.generateToken(user);
-            return new LoginResponseDto(token, user.getName(), user.getRole(), user.getId());
+
+            // Inicialize dados da classe
+            String classId = null;
+            String className = null;
+            String schoolYear = null;
+            String shift = null;
+            Integer semester = null;
+
+            // Verifique se o usuário é ALUNO e se possui uma classe associada
+            if (user.getRole() == UserRole.ALUNO && user.getStudentClass() != null) {
+                Classes turma = user.getStudentClass();
+                classId = turma.getId();
+                className = turma.getNameClass();
+                schoolYear = turma.getSchoolYear();
+                shift = turma.getShift();
+                semester = turma.getSemester();
+            }
+
+            // Retorne a resposta achatada
+            return new LoginResponseDto(
+                    token,
+                    user.getName(),
+                    user.getRole(),
+                    user.getId(),
+                    classId,
+                    className,
+                    schoolYear,
+                    shift,
+                    semester
+            );
+
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("Erro ao realizar login: CPF não encontrado");
         } catch (BadCredentialsException e) {
@@ -71,6 +103,8 @@ public class UsersService {
         }
     }
 
+
+
     public Users getByCpf(String cpf){
         Users user = (Users) usersRepository.findByCpf(cpf);
         if (user == null) {
@@ -79,13 +113,13 @@ public class UsersService {
         return user;
     }
 
-
     public List<AlunoDTO> getAllStudents() {
         List<Users> students = usersRepository.findByRole(UserRole.ALUNO);
         return students.stream()
                 .map(user -> new AlunoDTO(user.getId(),user.getCpf(), user.getName(), user.getEmail(), user.getStudentClass()))
                 .collect(Collectors.toList());
     }
+
 
     public List<Users> getAllProfessor(){
         return usersRepository.findByRole(UserRole.PROFESSOR);
