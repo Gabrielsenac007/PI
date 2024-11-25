@@ -1,6 +1,6 @@
 package com.Projeto.pi.medioTec.Entity.Statements;
 
-
+import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.Users;
 import jakarta.persistence.*;
 
@@ -12,7 +12,7 @@ public class Statement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "statement_id",updatable = false, unique = true)
+    @Column(name = "statement_id", updatable = false, unique = true)
     private String id;
 
     @Column(length = 30, nullable = false)
@@ -28,16 +28,21 @@ public class Statement {
     @JoinColumn(name = "creator_id", nullable = false)
     private Users creator;
 
+    @ManyToOne
+    @JoinColumn(name = "class_id", nullable = false) // Nome da coluna correspondente ao relacionamento
+    private Classes classes; // Mudando o nome do atributo para "classes" para seguir a convenção
 
-
-    public Statement() {
+    public Statement(String title, String content, Users users, String s) {
     }
 
-    public Statement( String title, String content,  Users creator) {
+    public Statement(String title, String content, Users creator, Classes classes) {
         this.title = title;
         this.content = content;
         this.creator = creator;
+        this.classes = classes;
     }
+
+    // Getters e Setters
 
     public String getId() {
         return id;
@@ -77,5 +82,13 @@ public class Statement {
 
     public void setCreator(Users creator) {
         this.creator = creator;
+    }
+
+    public Classes getClasses() {
+        return classes;
+    }
+
+    public void setClasses(Classes classes) {
+        this.classes = classes;
     }
 }
