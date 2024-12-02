@@ -31,6 +31,9 @@ public class Users implements UserDetails {
     @Column(length = 100, nullable = false)
     private String password;
 
+    @Column(length = 255, nullable = true)
+    private String imgProfile;
+
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "class_id")  // FK da turma
@@ -61,13 +64,15 @@ public class Users implements UserDetails {
         this.role = role;
     }
 
-    public Users(String cpf, String name, String email, String password, Classes studentClass, UserRole role) {
+    public Users(String cpf, String name, String email, String password, Classes studentClass, UserRole role, String imgProfile) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.password = password;
         this.studentClass = studentClass;
         this.role = role;
+        this.imgProfile = imgProfile;
+
     }
 
     public String getCpf() {
@@ -181,4 +186,11 @@ public class Users implements UserDetails {
         this.disciplines = disciplines;
     }
 
+    public String getImgProfile() {
+        return imgProfile;
+    }
+
+    public void setImgProfile(String imgProfile) {
+        this.imgProfile = imgProfile;
+    }
 }

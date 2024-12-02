@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -64,9 +65,23 @@ public class UsersController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Professor registrado com sucesso!");
     }
 
-    @PostMapping("/register/student")
-    public ResponseEntity<String> insertStudent(@RequestBody AlunoRegisterRequestDto request) {
-        usersService.insertStudent(request);
+    @PostMapping(value = "/register/student", consumes = { "multipart/form-data" })
+    public ResponseEntity<String> insertStudent(
+            @RequestParam String cpf,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String classeId,
+            @RequestParam(required = false) MultipartFile imgProfile) {
+
+        // Criar o DTO manualmente
+        AlunoRegisterRequestDto request = new AlunoRegisterRequestDto(
+                cpf, name, email, password, classeId
+        );
+
+        // Passar o DTO para o serviço
+        usersService.insertStudent(request, imgProfile);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Aluno registrado com sucesso!");
     }
 

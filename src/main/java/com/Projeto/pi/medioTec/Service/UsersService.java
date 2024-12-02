@@ -15,6 +15,8 @@ import com.Projeto.pi.medioTec.Repository.ClassesRepository;
 import com.Projeto.pi.medioTec.Repository.DisciplinesRepository;
 import com.Projeto.pi.medioTec.Repository.UsersRepository;
 import com.Projeto.pi.medioTec.security.TokenService;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,8 +25,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -46,6 +51,9 @@ public class UsersService {
 
     @Autowired
     private ClassesRepository classesRepository;
+
+    @Autowired
+    private Cloudinary cloudinary;
 
     public LoginResponseDto login(UserAuthenticationRequestDto data) {
 
@@ -116,7 +124,7 @@ public class UsersService {
     public List<AlunoDTO> getAllStudents() {
         List<Users> students = usersRepository.findByRole(UserRole.ALUNO);
         return students.stream()
-                .map(user -> new AlunoDTO(user.getId(),user.getCpf(), user.getName(), user.getEmail(), user.getStudentClass()))
+                .map(user -> new AlunoDTO(user.getId(),user.getCpf(), user.getName(), user.getEmail(), user.getImgProfile() ,user.getStudentClass()))
                 .collect(Collectors.toList());
     }
 
@@ -159,7 +167,7 @@ public class UsersService {
 
     }
 
-    private void createAluno(AlunoRegisterRequestDto register, UserRole role){
+    private void createAluno(AlunoRegisterRequestDto register, UserRole role, MultipartFile imgProfile){
 
         Optional<Classes> opClasses = classesRepository.findById(register.classeId());
         if (opClasses.isEmpty()){
@@ -174,9 +182,19 @@ public class UsersService {
             throw new IllegalArgumentException("Usuário já existe já existe");
         }
 
+        String imgProfileUrl = null;
+        if (imgProfile != null && !imgProfile.isEmpty()) {
+            try {
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(imgProfile.getBytes(), ObjectUtils.emptyMap());
+                imgProfileUrl = (String) uploadResult.get("secure_url");
+            } catch (IOException e) {
+                throw new RuntimeException("Erro ao fazer upload da imagem de perfil: " + e.getMessage(), e);
+            }
+        }
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(register.password());
-        Users newUser = new Users(register.cpf(), register.name(), register.email(), encryptedPassword, classes, role);
-        Users aluno = usersRepository.save(newUser);
+        Users newUser = new Users(register.cpf(), register.name(), register.email(), encryptedPassword, classes, role, imgProfileUrl);
+        usersRepository.save(newUser);
 
     }
 
@@ -192,8 +210,8 @@ public class UsersService {
         usersRepository.deleteById(id);
     }
 
-    public void insertStudent(AlunoRegisterRequestDto register){
-        createAluno(register, UserRole.ALUNO);
+    public void insertStudent(AlunoRegisterRequestDto register, MultipartFile imgProfile){
+        createAluno(register, UserRole.ALUNO, imgProfile);
     }
 
     public void  deleteProfessor(String id) {
