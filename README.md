@@ -1,137 +1,132 @@
-Projeto: [Nome da Aplicação Escolar]
+# 📚 Sistema de Gestão Escolar - Mediotec (Backend)
 
+Este projeto foi desenvolvido como parte de um trabalho acadêmico para um sistema de gestão escolar voltado para o Mediotec, um programa de ensino médio profissionalizante oferecido pelo Senac na região metropolitana do Recife. O backend da aplicação é responsável por gerenciar toda a lógica de negócio, armazenamento de dados e integração com o frontend via APIs RESTful.
 
-Descrição
-[Nome da Aplicação Escolar] é uma aplicação desenvolvida em Java utilizando o framework Spring, voltada para a gestão escolar com foco nas atividades de coordenadores e professores. A plataforma facilita a comunicação, o gerenciamento de turmas, o acompanhamento do desempenho dos alunos e a administração de horários e planos de aula.
+---
 
-O sistema segue os princípios de arquitetura [ex: MVC] e implementa boas práticas de desenvolvimento de software, garantindo eficiência e escalabilidade.
+## 🚀 Tecnologias Utilizadas
 
+- **☕ Java** (JDK 17)  
+- **🌱 Spring Framework** (Boot, Data JPA, Security)  
+- **📂 Banco de Dados Relacional** (MySQL)  
+- **🔐 Autenticação e Autorização** (JWT)  
+- **🛠️ Maven** para gerenciamento de dependências  
+- **🌐 Integração com APIs RESTful**
 
-Funcionalidades
-Gerenciamento de Turmas: Coordenadores podem criar, editar e excluir turmas, além de atribuir professores a cada turma.
-Cadastro de Alunos e Professores: Inserção, edição e exclusão de registros de alunos e professores, com controle de permissões.
-Planejamento de Aulas: Professores podem criar e gerenciar planos de aula, associando conteúdos e atividades para cada turma.
-Acompanhamento de Notas e Frequência: Professores lançam notas e frequência dos alunos, e coordenadores podem visualizar relatórios detalhados.
-Calendário Escolar: Coordenadores gerenciam o calendário de eventos e aulas, que é visível para todos os usuários.
-Comunicação Interna: Ferramenta de mensagens entre professores e coordenadores para troca de informações e coordenação de atividades.
-Tecnologias Utilizadas
+---
 
+## 📋 Pré-requisitos
 
-Java: versão [versão]
-Spring Framework: versão [versão do Spring]
-Spring Boot: [versão do Spring Boot]
-Spring Data JPA: [versão]
-Spring Security: [versão]
-Banco de Dados: [banco de dados utilizado] (ex: MySQL, PostgreSQL)
-Maven/Gradle: [especificar qual]
-Thymeleaf (ou outra engine de templates, se aplicável): [versão]
-Testes: [JUnit, Mockito, etc.]
+Certifique-se de ter os seguintes softwares instalados antes de começar:
 
+- **Java JDK** (versão 17 ou superior)  
+- **Maven** (versão 3.8 ou superior)  
+- **MySQL** (ou outro banco de dados relacional configurado)  
+- **Docker** (opcional, para deploy containerizado)
 
-Pré-requisitos
-Antes de começar, certifique-se de ter o seguinte instalado em sua máquina:
+---
 
-Java JDK: versão [versão do JDK]
-Maven ou Gradle: versão [versão]
-Banco de Dados: [ex: MySQL, PostgreSQL]: versão [versão]
-Docker (se a aplicação for containerizada): [versão]
-Configuração do Projeto
-Clone o repositório:
+## 🔧 Instalação e Configuração
 
-bash
-Copy code
-git clone [URL do repositório]
-Acesse o diretório do projeto:
+1. Clone este repositório:
 
-bash
-Copy code
-cd [nome-do-diretório]
-Configure o arquivo application.properties ou application.yml com os parâmetros adequados, como conexão com o banco de dados:
+```
+git clone https://github.com/seu-repositorio/backend-mediotec.git
+```
 
-properties
-Copy code
-spring.datasource.url=jdbc:[tipo do banco]://localhost:3306/[nome_do_banco]
-spring.datasource.username=[seu_usuario]
-spring.datasource.password=[sua_senha]
-Execute o comando para compilar e baixar as dependências:
+2. Acesse o diretório do arquivo:
 
-Com Maven:
+```
+cd backend-mediotec
+```
 
-bash
-Copy code
+3. Configure o Banco de Dados:
+
+Edite o arquivo **src/main/resources/application.properties** ou **application.yml** com suas credenciais:
+
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/mediotec
+spring.datasource.username=seu_usuario
+spring.datasource.password=sua_senha
+spring.jpa.hibernate.ddl-auto=update
+```
+
+4. Compile e instale as dependências:
+
+```
 mvn clean install
-Com Gradle:
+```
 
-bash
-Copy code
-gradle build
-Execute a aplicação:
-
-Com Maven:
-
-bash
-Copy code
+5. Execute a aplicação:
+```
 mvn spring-boot:run
-Com Gradle:
+```
+A aplicação estará disponível em: **http://localhost:8080**.
 
-bash
-Copy code
-gradle bootRun
-Uso
-A seguir estão as instruções básicas de uso da aplicação:
+---
 
-Acesso ao sistema: Coordenadores e professores fazem login na plataforma usando suas credenciais.
-Gerenciamento de turmas: Coordenadores podem acessar a área de "Gerenciamento de Turmas" para criar e atribuir professores.
-Cadastro e edição de usuários: Coordenadores têm permissão para criar, editar ou remover registros de alunos e professores.
-Lançamento de notas e frequência: Professores lançam as notas e o controle de frequência dos alunos, que pode ser visualizado por coordenadores.
-Relatórios: Coordenadores podem gerar relatórios de desempenho e frequência para análise.
-Exemplo de requisição:
+## 📦 Estrutura do Projeto
 
-Endpoint: POST /api/turma
+- **`src/main/java`**: Diretório principal do código-fonte.
+  - **`controller`**: Classes responsáveis por gerenciar os endpoints da API REST.
+  - **`service`**: Contém as regras de negócio e lógica da aplicação.
+  - **`repository`**: Interfaces para interação com o banco de dados utilizando Spring Data JPA.
+  - **`entities`**: Entidades que representam os objetos principais do sistema.
+- **`src/main/resources`**: Configurações e recursos da aplicação.
+  - **`application.properties` ou `application.yml`**: Arquivo para configurar o ambiente da aplicação (ex.: banco de dados, autenticação).
+- **`src/test/java`**: Testes unitários e de integração.
 
-Body:
+---
 
-json
-Copy code
-{
-"nome": "Turma A",
-"ano": "2024",
-"professorId": 1
-}
-Resposta:
+## 🛠️ Funcionalidades Implementadas
 
-json
-Copy code
-{
-"mensagem": "Turma criada com sucesso!"
-}
-Testes
-Para rodar os testes automatizados:
+- **Gerenciamento de Usuários**: Cadastro, edição, listagem e exclusão de alunos, professores e coordenadores.
+- **Gerenciamento de Turmas**: Criação, edição e atribuição de professores a turmas específicas.
+- **Lançamento de Notas**: Professores podem registrar notas e a frequência dos alunos.
+- **Relatórios de Desempenho**: Geração de relatórios de desempenho e frequência para coordenadores.
+- **Autenticação e Autorização**: Sistema seguro utilizando JWT para controlar o acesso.
 
-Com Maven:
+---
 
-bash
-Copy code
-mvn test
-Com Gradle:
 
-bash
-Copy code
-gradle test
-Deploy
-[Instruções sobre como realizar o deploy da aplicação. Se for com Docker, Kubernetes, AWS, Heroku, etc., inclua os comandos necessários ou as configurações específicas.]
+## 📑 Exemplo de Requisição
 
-Contribuição
-Caso queira contribuir com este projeto:
+- **Endpoint**: `POST /api/users/register/professor`
+  - **Body**:
+    ```json
+    {
+      "professor": {
+      "cpf": "string",
+      "name": "string",
+      "email": "string",
+      "password": "string"
+      },
+        "disciplina": [
+        {
+          "disciplinaId": "string"
+        }
+      ]
+    }
+    ```
+  - **Resposta**:
+    ```
+    Professor cadastrado com sucesso!
+    ```
 
-Faça um fork do repositório.
-Crie uma branch com a nova feature: git checkout -b feature/nova-feature.
-Realize o commit: git commit -m 'Adiciona nova feature'.
-Envie a branch: git push origin feature/nova-feature.
-Abra um Pull Request.
+---
 
-Licença
-Este projeto está sob a licença [tipo de licença]. Consulte o arquivo LICENSE para mais detalhes.
+## 📦 Deploy
+O backend pode ser deployado utilizando Docker. Siga os passos:
 
-Autor(es)
-[Seu nome] - Desenvolvedor - [Seu contato, como LinkedIn, GitHub, etc.]
+1. Build da imagem Docker:
+
+```
+docker build -t backend-mediotec .
+```
+
+2. Inicie o container:
+```
+docker run -p 8080:8080 backend-mediotec
+```
+
+**Raleu! 👍**
