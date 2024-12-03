@@ -42,7 +42,7 @@ public class Statement {
         this.classes = classes;
     }
 
-    public Statement(String title, String content, Users users, String s) {
+    public Statement(String title, String content, Users users, String classes) {
     }
 
     // Getters e Setters
