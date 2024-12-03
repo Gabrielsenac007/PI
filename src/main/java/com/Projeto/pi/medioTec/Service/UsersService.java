@@ -6,6 +6,7 @@ import com.Projeto.pi.medioTec.Dto.Request.UserAuthenticationRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.classes.ClassDto;
 import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
+import com.Projeto.pi.medioTec.Dto.Response.GetCoordinatorDto;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
@@ -270,6 +271,10 @@ public class UsersService {
         }
         Users user = optionalUser.get();
 
+        if (updatedData.cpf() != null && !updatedData.cpf().isEmpty()){
+            user.setCpf(updatedData.cpf());
+        }
+
         if (updatedData.name() != null && !updatedData.name().isEmpty()) {
             user.setName(updatedData.name());
         }
@@ -306,4 +311,12 @@ public class UsersService {
     public List<Users> getByName(String nameUser) {
         return usersRepository.findByName(nameUser);
     }
+
+    public GetCoordinatorDto pegarCoordenador(String id){
+        Optional<Users> users = usersRepository.findById(id);
+        return new GetCoordinatorDto(users.get().getCpf(), users.get().getName(), users.get().getEmail());
+
+    }
+
+
 }

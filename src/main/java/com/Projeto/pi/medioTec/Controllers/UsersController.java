@@ -6,6 +6,7 @@ import com.Projeto.pi.medioTec.Dto.Request.Coordinator.AssDiscAndProfReqDto;
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.ProfessorRegisterCombineDto;
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
+import com.Projeto.pi.medioTec.Dto.Response.GetCoordinatorDto;
 import com.Projeto.pi.medioTec.Entity.User.Users;
 import com.Projeto.pi.medioTec.Service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -152,6 +153,11 @@ public class UsersController {
     @GetMapping("coordenador/findByNome/{nameUser}")
     public ResponseEntity<List<Users>> getByNameCoordenador(@PathVariable String nameUser) {
         return ResponseEntity.ok(usersService.getByName(nameUser));
+    }
+
+    @GetMapping("/coordenador/findById/{id}")
+    public ResponseEntity<GetCoordinatorDto> getByIdCoodinator(@PathVariable String id){
+        return ResponseEntity.ok(usersService.pegarCoordenador(id));
     }
 
 
