@@ -2,6 +2,8 @@ package com.Projeto.pi.medioTec.Entity.Absences;
 
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.Users;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,11 +15,8 @@ public class Absences {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "class_id", nullable = false)
-    private Classes classe;
-
-    @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
+    @JsonBackReference // Indica que Users é o lado "pai"
     private Users student;
 
     @Column(name = "absence_count", nullable = false)
@@ -32,14 +31,6 @@ public class Absences {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Classes getClasse() {
-        return classe;
-    }
-
-    public void setClasse(Classes classe) {
-        this.classe = classe;
     }
 
     public Users getStudent() {

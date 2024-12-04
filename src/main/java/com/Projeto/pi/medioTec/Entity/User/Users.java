@@ -1,8 +1,10 @@
 package com.Projeto.pi.medioTec.Entity.User;
 
+import com.Projeto.pi.medioTec.Entity.Absences.Absences;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,13 +18,13 @@ public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "user_id",updatable = false, unique = true)
+    @Column(name = "user_id", updatable = false, unique = true)
     private String id;
 
     @Column(length = 15, nullable = false, unique = true)
     private String cpf;
 
-    @Column(length = 100, nullable = false )
+    @Column(length = 100, nullable = false)
     private String name;
 
     @Column(length = 255, nullable = false, unique = true)
@@ -31,14 +33,16 @@ public class Users implements UserDetails {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 255, nullable = true)
+    @Column(length = 255)
     private String imgProfile;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "class_id")  // FK da turma
+    @JsonBackReference // Relacionamento inverso com Classes
+    @JoinColumn(name = "class_id")
     private Classes studentClass;
 
+    @Enumerated(EnumType.STRING) // Persistir como String legível
+    @Column(nullable = false)
     private UserRole role;
 
     @ManyToMany
@@ -48,13 +52,13 @@ public class Users implements UserDetails {
     )
     private Set<Disciplines> disciplines = new HashSet<>();
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @JsonManagedReference // Relacionamento direto com Absences
+    private List<Absences> absences = new ArrayList<>();
 
-
-
-
+    // Construtores
     public Users() {
     }
-
 
     public Users(String cpf, String name, String email, String password, UserRole role) {
         this.cpf = cpf;
@@ -72,9 +76,9 @@ public class Users implements UserDetails {
         this.studentClass = studentClass;
         this.role = role;
         this.imgProfile = imgProfile;
-
     }
 
+    // Getters e Setters
     public String getCpf() {
         return cpf;
     }
@@ -107,12 +111,60 @@ public class Users implements UserDetails {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getImgProfile() {
+        return imgProfile;
+    }
+
+    public void setImgProfile(String imgProfile) {
+        this.imgProfile = imgProfile;
+    }
+
+    public Classes getStudentClass() {
+        return studentClass;
+    }
+
+    public void setStudentClass(Classes studentClass) {
+        this.studentClass = studentClass;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
+    public Set<Disciplines> getDisciplines() {
+        return disciplines;
+    }
+
+    public void setDisciplines(Set<Disciplines> disciplines) {
+        this.disciplines = disciplines;
+    }
+
+    public List<Absences> getAbsences() {
+        return absences;
+    }
+
+    public void setAbsences(List<Absences> absences) {
+        this.absences = absences;
+    }
+
+    // Implementação de UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         if (this.role == UserRole.ADMIN) {
-            // Admin recebe todas as roles
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             authorities.add(new SimpleGrantedAuthority("ROLE_COORDENADOR"));
             authorities.add(new SimpleGrantedAuthority("ROLE_PROFESSOR"));
@@ -126,11 +178,6 @@ public class Users implements UserDetails {
         }
 
         return authorities;
-
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     @Override
@@ -156,41 +203,5 @@ public class Users implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public Classes getStudentClass() {
-        return studentClass;
-    }
-
-    public void setStudentClass(Classes studentClass) {
-        this.studentClass = studentClass;
-    }
-
-    public Set<Disciplines> getDisciplines() {
-        return disciplines;
-    }
-
-    public void setDisciplines(Set<Disciplines> disciplines) {
-        this.disciplines = disciplines;
-    }
-
-    public String getImgProfile() {
-        return imgProfile;
-    }
-
-    public void setImgProfile(String imgProfile) {
-        this.imgProfile = imgProfile;
     }
 }
