@@ -1,7 +1,9 @@
 package com.Projeto.pi.medioTec.Controllers;
 
 import com.Projeto.pi.medioTec.Dto.Request.Coordinator.InsertDisciplineReqDto;
+import com.Projeto.pi.medioTec.Dto.Request.Coordinator.RemoveProfessorDiscDto;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
+import com.Projeto.pi.medioTec.Repository.DisciplinesRepository;
 import com.Projeto.pi.medioTec.Service.DisciplinesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/disciplines")
 public class DisciplinesController {
+
+    @Autowired
+    private DisciplinesRepository disciplinesRepository;
 
     @Autowired
     private DisciplinesService disciplinesService;
@@ -47,6 +52,12 @@ public class DisciplinesController {
     public ResponseEntity<String> updateDisciplinesOfProfessor(@PathVariable String userId, @RequestBody List<String> disciplineIds) {
         disciplinesService.updateDisciplinesOfProfessor(userId, disciplineIds);
         return ResponseEntity.ok("Disciplinas do professor atualizadas com sucesso!");
+    }
+
+    @DeleteMapping("/removeAssoci")
+    public ResponseEntity<?> removeProfessorDiscipline(@RequestBody RemoveProfessorDiscDto request){
+        disciplinesRepository.remove_professor_discipline(request.professorId(), request.disciplineId());
+        return ResponseEntity.ok("Associção removida com sucesso");
     }
 
 }

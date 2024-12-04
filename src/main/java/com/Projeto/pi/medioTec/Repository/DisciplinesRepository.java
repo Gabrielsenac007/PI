@@ -14,5 +14,9 @@ public interface DisciplinesRepository extends JpaRepository<Disciplines, String
                                             @Param("p_disciplina_id") String disciplineId
     );
 
+    @Procedure
+    void remove_professor_discipline(@Param("p_professor_id") String professorId,
+                                     @Param("p_discipline_id") String disciplineId
+    );
 
 }

@@ -223,12 +223,15 @@ public class UsersService {
         usersRepository.deleteById(id);
     }
 
-    public Users updateProfessor(String id, UserRegisterRequestDto updatedData) {
+    public Users updateProfessor(String id, UserRegisterRequestDto updatedData, List<AssDiscAndProfReqDto> newDisciplines) {
         Optional<Users> optionalUser = usersRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
+
         Users user = optionalUser.get();
+
+
         if (updatedData.name() != null && !updatedData.name().isEmpty()) {
             user.setName(updatedData.name());
         }
@@ -240,7 +243,17 @@ public class UsersService {
             user.setPassword(encryptedPassword);
         }
 
-        return usersRepository.save(user);
+        user = usersRepository.save(user);
+
+        if (newDisciplines != null && !newDisciplines.isEmpty()) {
+            for (AssDiscAndProfReqDto discipline : newDisciplines) {
+                if (user.getDisciplines().stream().noneMatch(d -> d.getId().equals(discipline.disciplinaId()))) {
+                    disciplinesRepository.associate_professor_and_discipline(user.getId(), discipline.disciplinaId());
+                }
+            }
+        }
+
+        return user;
     }
 
     public Users updateStudent(String id, UserRegisterRequestDto updatedData) {

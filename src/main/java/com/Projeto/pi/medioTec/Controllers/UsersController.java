@@ -105,8 +105,12 @@ public class UsersController {
     }
 
     @PutMapping("/update/professor/{id}")
-    public ResponseEntity<String> updateProfessor(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
-        Users updatedUser = usersService.updateProfessor(id, request);
+    public ResponseEntity<String> updateProfessor(
+            @PathVariable String id,
+            @RequestBody ProfessorRegisterCombineDto request
+    ) {
+
+        Users updatedUser = usersService.updateProfessor(id, request.professor(), request.disciplina());
         return ResponseEntity.ok().body("Usuário de ID: " + id + " foi atualizado com sucesso.");
     }
 
