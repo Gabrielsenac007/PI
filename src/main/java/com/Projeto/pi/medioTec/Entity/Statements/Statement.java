@@ -32,7 +32,7 @@ public class Statement {
     @JoinColumn(name = "class_id", nullable = false) // Nome da coluna correspondente ao relacionamento
     private Classes classes; // Mudando o nome do atributo para "classes" para seguir a convenção
 
-    public Statement(String title, String content, Users users, String s) {
+    public Statement() {
     }
 
     public Statement(String title, String content, Users creator, Classes classes) {
@@ -40,6 +40,9 @@ public class Statement {
         this.content = content;
         this.creator = creator;
         this.classes = classes;
+    }
+
+    public Statement(String title, String content, Users users, String classes) {
     }
 
     // Getters e Setters

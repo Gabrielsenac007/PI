@@ -59,4 +59,8 @@ public class DisciplinesService {
         usersRepository.save(professor);
     }
 
+    public List<Disciplines> getDisciplinesByProfessorId(String userId) {
+        return disciplinesRepository.findByProfessors_Id(userId); // Chama o repositório
+    }
+
 }

@@ -34,7 +34,7 @@ public class StatementService {
 
         Users users = creator.get();
 
-        Statement statement = new Statement(data.title(), data.content(), users,  data.creatorId());
+        Statement statement = new Statement(data.title(), data.content(), users,  data.classId());
         statementRepository.save(statement);
 
     }
