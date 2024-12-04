@@ -142,6 +142,7 @@ public class UsersService {
     public List<Users> getAllCoordenador(){
         return usersRepository.findByRole(UserRole.COORDENADOR);
     }
+
     private void createUserWithRole(UserRegisterRequestDto register, UserRole role){
         Users user = (Users) usersRepository.findByCpf(register.cpf());
 

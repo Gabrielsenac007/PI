@@ -39,7 +39,9 @@ public class Users implements UserDetails {
     @JoinColumn(name = "class_id")  // FK da turma
     private Classes studentClass;
 
+    @Enumerated(EnumType.ORDINAL)
     private UserRole role;
+
 
     @ManyToMany
     @JoinTable(name = "tb_professores_disciplinas",
