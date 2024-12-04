@@ -2,6 +2,7 @@ package com.Projeto.pi.medioTec.Entity.Disciplines;
 
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
 import com.Projeto.pi.medioTec.Entity.User.Users;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -22,6 +23,7 @@ public class Disciplines {
     @Column(length = 500)
     private String description;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "disciplines")
     private Set<Users> professors = new HashSet<>();
 
@@ -59,5 +61,13 @@ public class Disciplines {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Users> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(Set<Users> professors) {
+        this.professors = professors;
     }
 }

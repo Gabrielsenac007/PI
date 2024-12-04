@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/disciplines")
@@ -58,6 +59,15 @@ public class DisciplinesController {
     public ResponseEntity<?> removeProfessorDiscipline(@RequestBody RemoveProfessorDiscDto request){
         disciplinesRepository.remove_professor_discipline(request.professorId(), request.disciplineId());
         return ResponseEntity.ok("Associção removida com sucesso");
+    }
+
+    @GetMapping("/{userId}/getDisciplines")
+    public ResponseEntity<List<Disciplines>> getDisciplinesByProfessorId(@PathVariable String userId) {
+        List<Disciplines> disciplines = disciplinesService.getDisciplinesByProfessorId(userId);
+        if (disciplines.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Retorna 404 caso não tenha disciplinas
+        }
+        return ResponseEntity.ok(disciplines); // Retorna as disciplinas associadas
     }
 
 }

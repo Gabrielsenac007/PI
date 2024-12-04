@@ -7,6 +7,7 @@ import com.Projeto.pi.medioTec.Dto.Request.Coordinator.ProfessorRegisterCombineD
 import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
 import com.Projeto.pi.medioTec.Dto.Response.GetCoordinatorDto;
+import com.Projeto.pi.medioTec.Dto.Response.GetProfessorDto;
 import com.Projeto.pi.medioTec.Entity.User.Users;
 import com.Projeto.pi.medioTec.Service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,12 @@ public class UsersController {
     public ResponseEntity<List<AlunoDTO>> getAllStudents() {
         List<AlunoDTO> students = usersService.getAllStudents();
         return ResponseEntity.ok(students);
+    }
+
+    @GetMapping("/student/findById/{id}")
+    public ResponseEntity<AlunoDTO> getStudentById(@PathVariable String id){
+        AlunoDTO student = usersService.getStudent(id);
+        return ResponseEntity.ok(student);
     }
 
     @GetMapping("/allProfessor")
@@ -114,11 +121,24 @@ public class UsersController {
         return ResponseEntity.ok().body("Usuário de ID: " + id + " foi atualizado com sucesso.");
     }
 
-    @PutMapping("/update/student/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
-        Users updatedUser = usersService.updateStudent(id, request);
-        return ResponseEntity.ok().body("Usuário de ID: " + request.name() + " foi atualizado com sucesso.");
+    @PutMapping(value = "/update/student/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<String> updateStudent(
+            @PathVariable String id,
+            @RequestParam String cpf,
+            @RequestParam String name,
+            @RequestParam String email,
+            @RequestParam(required = false) String password,
+            @RequestParam String classeId,
+            @RequestParam(required = false) MultipartFile imgProfile) {
+
+        AlunoRegisterRequestDto request = new AlunoRegisterRequestDto(cpf, name, email, password, classeId);
+
+
+        Users updatedUser = usersService.updateStudent(id, request, imgProfile);
+
+        return ResponseEntity.ok().body("Usuário de ID: " + name + " foi atualizado com sucesso.");
     }
+
 
     @PutMapping("/update/coordinator/{id}")
     public ResponseEntity<String> updateCoordinator(@PathVariable String id, @RequestBody UserRegisterRequestDto request) {
@@ -162,6 +182,11 @@ public class UsersController {
     @GetMapping("/coordenador/findById/{id}")
     public ResponseEntity<GetCoordinatorDto> getByIdCoodinator(@PathVariable String id){
         return ResponseEntity.ok(usersService.pegarCoordenador(id));
+    }
+
+    @GetMapping("/professor/findById/{id}")
+    public ResponseEntity<GetProfessorDto> getByIdProfessor(@PathVariable String id){
+        return ResponseEntity.ok(usersService.pegarProfessor(id));
     }
 
 

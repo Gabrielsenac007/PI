@@ -7,6 +7,7 @@ import com.Projeto.pi.medioTec.Dto.Request.UserRegisterRequestDto;
 import com.Projeto.pi.medioTec.Dto.Request.classes.ClassDto;
 import com.Projeto.pi.medioTec.Dto.Response.AlunoDTO;
 import com.Projeto.pi.medioTec.Dto.Response.GetCoordinatorDto;
+import com.Projeto.pi.medioTec.Dto.Response.GetProfessorDto;
 import com.Projeto.pi.medioTec.Dto.Response.LoginResponseDto;
 import com.Projeto.pi.medioTec.Entity.Disciplines.Disciplines;
 import com.Projeto.pi.medioTec.Entity.Teams.Classes;
@@ -129,6 +130,10 @@ public class UsersService {
                 .collect(Collectors.toList());
     }
 
+    public AlunoDTO getStudent(String id){
+        Optional<Users> users = usersRepository.findById(id);
+        return new AlunoDTO(users.get().getId(), users.get().getCpf(), users.get().getName(), users.get().getEmail(), users.get().getImgProfile(), users.get().getStudentClass());
+    }
 
     public List<Users> getAllProfessor(){
         return usersRepository.findByRole(UserRole.PROFESSOR);
@@ -256,12 +261,13 @@ public class UsersService {
         return user;
     }
 
-    public Users updateStudent(String id, UserRegisterRequestDto updatedData) {
+    public Users updateStudent(String id, AlunoRegisterRequestDto updatedData, MultipartFile imgProfile) {
         Optional<Users> optionalUser = usersRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new IllegalArgumentException("Usuário não encontrado");
         }
         Users user = optionalUser.get();
+
 
         if (updatedData.name() != null && !updatedData.name().isEmpty()) {
             user.setName(updatedData.name());
@@ -274,7 +280,59 @@ public class UsersService {
             user.setPassword(encryptedPassword);
         }
 
+
+        if (imgProfile != null && !imgProfile.isEmpty()) {
+            if (user.getImgProfile() != null && !user.getImgProfile().isEmpty()) {
+                deleteImageFromCloudinary(user.getImgProfile());
+            }
+
+            String newImageUrl = uploadImageToCloudinary(imgProfile);
+            user.setImgProfile(newImageUrl);
+        }
         return usersRepository.save(user);
+    }
+
+    public void deleteImageFromCloudinary(String imageUrl) {
+        try {
+            String publicId = getPublicIdFromUrl(imageUrl);
+            if (publicId != null) {
+                cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao deletar a imagem do Cloudinary", e);
+        }
+    }
+
+    private String getPublicIdFromUrl(String url) {
+        try {
+
+            if (url != null && !url.isEmpty()) {
+                String[] parts = url.split("/");
+
+                if (parts.length > 1) {
+
+                    String fileNameWithExtension = parts[parts.length - 1];
+                    String fileName = fileNameWithExtension.split("\\.")[0];
+                    return fileName;
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao processar a URL da imagem", e);
+        }
+        return null;
+    }
+
+    private String uploadImageToCloudinary(MultipartFile imgProfile) {
+        try {
+            Map<String, Object> uploadResult = cloudinary.uploader().upload(imgProfile.getBytes(), ObjectUtils.emptyMap());
+            String imageUrl = (String) uploadResult.get("secure_url");
+
+            String imageUrlWithNoCache = imageUrl + "?random=" + System.currentTimeMillis();
+
+            return imageUrlWithNoCache;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao fazer upload da imagem para o Cloudinary", e);
+        }
     }
 
     public Users updateCoordinator(String id, UserRegisterRequestDto updatedData) {
@@ -328,6 +386,11 @@ public class UsersService {
     public GetCoordinatorDto pegarCoordenador(String id){
         Optional<Users> users = usersRepository.findById(id);
         return new GetCoordinatorDto(users.get().getCpf(), users.get().getName(), users.get().getEmail());
+
+    }
+    public GetProfessorDto pegarProfessor(String id){
+        Optional<Users> users = usersRepository.findById(id);
+        return new GetProfessorDto(users.get().getCpf(), users.get().getName(), users.get().getEmail());
 
     }
 
